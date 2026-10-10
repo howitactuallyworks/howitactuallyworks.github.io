@@ -15,6 +15,8 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/Montserrat-ExtraBold.otf" as="font" type="font/otf" crossorigin>
 <link rel="stylesheet" href="style.css">
+<script>window.goatcounter = { no_onload: true };</script>
+<script data-goatcounter="https://howitactuallyworks.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
 <a class="skip" href="#watch">Skip to the videos</a>
@@ -247,6 +249,22 @@
     sessionStorage.setItem("hiaw_from", from);
     document.querySelectorAll("a[data-urls]").forEach((a) => { const u = JSON.parse(a.dataset.urls)[from]; if (u) a.href = u; });
   }
+  // stats: the visit (with the bio it came from: ?from=ig|tt|yt|fb) and the clicks that matter
+  const count = (o, tries = 0) => {
+    const g = window.goatcounter;
+    if (g && g.count) g.count(o); else if (tries < 25 && "goatcounter" in window) setTimeout(() => count(o, tries + 1), 400);
+  };
+  const SRC = { instagram: "bio-instagram", youtube: "bio-youtube", tiktok: "bio-tiktok", facebook: "bio-facebook" };
+  count({ path: location.pathname, referrer: from && new URLSearchParams(location.search).get("from") ? SRC[from] : document.referrer });
+  // (plain substrings, not regexes: this script sits in a template literal, which eats backslashes)
+  const KIND = [["fiverr.com", "fiverr"], ["upwork.com", "upwork"], ["ko-fi.com", "kofi"], ["mailto:", "email"], ["park/", "park"],
+                ["instagram.com", "instagram"], ["youtube.com", "youtube"], ["youtu.be", "youtube"], ["tiktok.com", "tiktok"], ["facebook.com", "facebook"]];
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    const href = a.getAttribute("href"), k = KIND.find(([part]) => href.includes(part));
+    if (k) count({ path: "click-" + k[1] + (a.closest(".short, .made") ? "-video" : ""), title: a.textContent.trim().slice(0, 60), event: true });
+  });
   const vids = document.querySelectorAll("video[data-autoplay]");
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver((es) => es.forEach((e) => { const v = e.target;
@@ -301,6 +319,7 @@
     btn.disabled = true;
     send(form, new FormData(form)).then(() => {
       msg.textContent = form.classList.contains("notifyForm") ? "Done - you'll hear when the next one is out." : "Thanks - got it! We read every one.";
+      count({ path: form.classList.contains("notifyForm") ? "signup" : "suggestion", event: true });
       form.reset();
     }).catch(() => { msg.textContent = "Couldn't send that just now - please try again."; })
       .finally(() => { btn.disabled = false; });
@@ -312,6 +331,7 @@
       b.disabled = true;
       send(box1, { topic: b.dataset.topic, vote: "1", page: "home" }).then(() => {
         b.textContent = "Counted"; localStorage.setItem(k, "1");
+        count({ path: "vote", title: b.dataset.topic, event: true });
       }).catch(() => { b.disabled = false; });
     });
   });
