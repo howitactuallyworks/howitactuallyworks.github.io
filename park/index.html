@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Mechanism Park - How It Actually Works</title>
+<meta name="description" content="Every machine we've animated, cut open and running live in 3D: engines, a watch, a lock, an escalator, a crane. Pick a room and look closer.">
+<meta name="theme-color" content="#1d2733">
+<meta property="og:title" content="The Mechanism Park - How It Actually Works">
+<meta property="og:description" content="Walk around every machine we've animated, running live in 3D. Works on your phone.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://howitactuallyworks.github.io/media/og.jpg">
+<meta property="og:url" content="https://howitactuallyworks.github.io/park/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="park.css">
+</head>
+<body data-place="hub">
+<canvas id="view" aria-label="3D view of the mechanism park"></canvas>
+
+<header id="hud">
+  <a class="home" id="homeLink" href="../" aria-label="Back to the How It Actually Works home page"><span class="logo">HIAW</span></a>
+  <button id="backBtn" type="button">&lsaquo; All rooms</button>
+  <span id="where" aria-live="polite"></span>
+  <button id="listBtn" type="button" aria-expanded="false" aria-controls="list">All machines</button>
+</header>
+
+<!-- the hub: what this is and the way in (plain HTML: usable before the 3D is ready) -->
+<section id="hubUI" aria-labelledby="hubTitle">
+  <div class="hubHead">
+    <h1 id="hubTitle">The Mechanism Park</h1>
+    <p><b id="hubCount">16</b> machines, cut open and running live. <span class="pick">Pick a room to go in.</span></p>
+  </div>
+  <div id="cards"></div>
+</section>
+
+<!-- a room: the first-visit tip, the stepper, the walk toggle -->
+<div id="tip" hidden role="note">
+  <p><b>Tip:</b> tap a machine (or <b>Look closer</b>) to see how it works. Use <b>&lsaquo; &rsaquo;</b> to move between machines.</p>
+  <button id="tipClose" type="button" aria-label="Got it">Got it</button>
+</div>
+<nav id="stepper" aria-label="Machines in this room">
+  <button id="sPrev" class="arrow" type="button" aria-label="Previous machine">&lsaquo;</button>
+  <button id="sName" class="name" type="button"><span id="sCount">1 / 9</span><span id="sTitle"></span></button>
+  <button id="sNext" class="arrow" type="button" aria-label="Next machine">&rsaquo;</button>
+  <button id="sLook" class="look" type="button">Look closer</button>
+</nav>
+<button id="walkBtn" type="button" aria-pressed="false">Walk</button>
+<div id="joy" aria-hidden="true"><div id="knob"></div></div>
+
+<!-- look closer: the teaching layer -->
+<section id="panel" hidden aria-live="polite" aria-labelledby="pTitle">
+  <div class="pHead"><button id="pBack" type="button">&lsaquo; Back to the room</button><span id="pCount"></span></div>
+  <h2 id="pTitle"></h2>
+  <p id="pBlurb"></p>
+  <div id="pStages" class="stages" hidden></div>
+  <div id="pExtras" class="row"></div>
+  <div class="row main">
+    <button id="pPlay" type="button">Pause</button>
+    <button id="pStep" class="step" type="button">Next stage &#9656;</button>
+    <button id="pMore" type="button" aria-expanded="false" aria-controls="pMoreBox">More</button>
+  </div>
+  <div id="pMoreBox" hidden>
+    <div class="row"><button id="pLabels" class="chip on" type="button">Part names: on</button><button id="pSpeed" class="chip" type="button">Speed 1x</button></div>
+    <p id="pScale" class="scale"></p>
+  </div>
+  <div class="row nav">
+    <button id="pPrev" class="arrow" type="button" aria-label="Previous machine">&lsaquo;</button>
+    <a id="pWatch" class="watch" target="_blank" rel="noopener">&#9654; Watch the video</a>
+    <button id="pNext" class="arrow" type="button" aria-label="Next machine">&rsaquo;</button>
+  </div>
+</section>
+<div id="labels" aria-hidden="true"><svg id="labelLines"></svg></div>
+
+<section id="list" hidden aria-labelledby="listTitle">
+  <div class="listHead"><h2 id="listTitle">All machines</h2><button id="listClose" class="x" type="button" aria-label="Close">&times;</button></div>
+  <div id="listItems"></div>
+</section>
+
+<div id="fade" class="on" role="status"><div class="fadeBox"><span class="logo">HIAW</span><h2 id="fadeTitle">The Mechanism Park</h2><p id="fadeSub">Opening the park...</p><div class="bar"><i></i></div></div></div>
+<noscript><p class="nojs">The park needs JavaScript. <a href="../">Back to the videos</a></p></noscript>
+<script type="module" src="main.js"></script>
+</body>
+</html>
