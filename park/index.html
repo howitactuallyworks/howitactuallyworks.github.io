@@ -29,14 +29,15 @@
 <section id="hubUI" aria-labelledby="hubTitle">
   <div class="hubHead">
     <h1 id="hubTitle">The Mechanism Park</h1>
-    <p><b id="hubCount">16</b> machines, cut open and running live. <span class="pick">Pick a room to go in.</span></p>
+    <p><b id="hubCount">16</b> machines, cut open and running live. <span class="pick">Tap a room to go in.</span></p>
   </div>
-  <div id="cards"></div>
+  <div id="doorTags"></div>
+  <div id="clips" aria-hidden="true"></div>
 </section>
 
 <!-- a room: the first-visit tip, the stepper, the walk toggle -->
 <div id="tip" hidden role="note">
-  <p><b>Tip:</b> tap a machine (or <b>Look closer</b>) to see how it works. Use <b>&lsaquo; &rsaquo;</b> to move between machines.</p>
+  <p><b>Tip:</b> tap a machine (or <b>Look closer</b>) to see how it works. <b>&lsaquo; &rsaquo;</b> jump between machines, or walk with the joystick.</p>
   <button id="tipClose" type="button" aria-label="Got it">Got it</button>
 </div>
 <nav id="stepper" aria-label="Machines in this room">
@@ -45,7 +46,6 @@
   <button id="sNext" class="arrow" type="button" aria-label="Next machine">&rsaquo;</button>
   <button id="sLook" class="look" type="button">Look closer</button>
 </nav>
-<button id="walkBtn" type="button" aria-pressed="false">Walk</button>
 <div id="joy" aria-hidden="true"><div id="knob"></div></div>
 
 <!-- look closer: the teaching layer -->
