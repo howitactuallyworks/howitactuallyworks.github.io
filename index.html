@@ -1,64 +1,172 @@
 <!doctype html>
-<!-- The library (2026-10-26): every concept's live Lab, one card each; make_site.py fills CARDS and writes
-     phase4/site/index.html. -->
+<!-- The library (2026-10-26; the front page redesign 2026-10-27): every concept's live Lab, one card each - an orange
+     concept tag, the hook in big type, one plain line, a play cue - the newest as the big card on top. make_site.py
+     fills META (the share tags), HEAD (favicon, theme, counter), HERO and CARDS, and writes phase4/site/index.html.
+     Colours are the variables in :root (dark) and [data-theme="light"] (the videos' warm cream), as lab.html's. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>How It Actually Works · Lab</title>
 <meta name="description" content="Interactive 3D models of mechanical engineering concepts: move the sliders, watch the physics.">
+<meta name="description" content="Interactive 3D models of mechanical engineering concepts, from our Shorts: move the sliders, watch the physics.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="How It Actually Works Lab">
+<meta property="og:title" content="How It Actually Works Lab: move the sliders, watch the physics">
+<meta property="og:description" content="Interactive 3D models of mechanical engineering concepts, from our Shorts: move the sliders, watch the physics.">
+<meta property="og:url" content="https://howitactuallyworks.github.io/">
+<meta property="og:image" content="https://howitactuallyworks.github.io/capstan/thumb.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="900">
+<meta property="og:image:alt" content="The capstan rig from the Short, in 3D">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%23e4572e'/%3E%3Crect%20x='10'%20y='29'%20width='44'%20height='6'%20rx='3'%20fill='%23fff'%20fill-opacity='.5'/%3E%3Crect%20x='10'%20y='29'%20width='28'%20height='6'%20rx='3'%20fill='%23fff'/%3E%3Ccircle%20cx='38'%20cy='32'%20r='9'%20fill='%23fff'/%3E%3C/svg%3E">
+<script>
+(function () {
+  var root = document.documentElement, KEY = 'hiaw-theme', saved = null;
+  var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: light)') : null;
+  try { saved = localStorage.getItem(KEY); } catch (e) { saved = null; }
+  if (saved !== 'light' && saved !== 'dark') saved = null;
+  var device = function () { return mq && mq.matches ? 'light' : 'dark'; };
+  var apply = function (t) {
+    root.setAttribute('data-theme', t);
+    var b = document.querySelectorAll('[data-theme-toggle]');
+    for (var i = 0; i < b.length; i++) b[i].setAttribute('aria-label', t === 'light' ? 'Switch to the dark theme' : 'Switch to the light theme');
+  };
+  apply(saved || device());
+  if (mq && mq.addEventListener) mq.addEventListener('change', function () { if (!saved) apply(device()); });
+  document.addEventListener('DOMContentLoaded', function () { apply(root.getAttribute('data-theme')); });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest || !e.target.closest('[data-theme-toggle]')) return;
+    saved = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    try { localStorage.setItem(KEY, saved); } catch (e2) { /* no storage: this visit only */ }
+    apply(saved);
+  });
+})();
+window.__count = (function (code) {
+  if (!code || !/^https?:$/.test(location.protocol) || /^(localhost|127\.|\[::1\])/.test(location.hostname)) return function () {};
+  var sent = {};
+  return function (name, event) {
+    if (sent[name]) return;
+    sent[name] = 1;
+    try {
+      new Image().src = 'https://' + code + '.goatcounter.com/count?p=' + encodeURIComponent(name)
+        + '&t=' + encodeURIComponent(document.title) + (event ? '&e=true' : '&r=' + encodeURIComponent(document.referrer))
+        + '&s=' + screen.width + '&rnd=' + Math.random().toString(36).slice(2);
+    } catch (e) { /* the counter never breaks the page */ }
+  };
+})("");
+window.__count(location.pathname.replace(/index\.html$/, ''));
+</script>
 <style>
   :root {
-    --bg: #12151a; --card: #1b2027; --line: rgba(255, 255, 255, 0.09); --text: #f2f4f7; --muted: #a3adb9;
-    --accent: #e4572e;
+    color-scheme: dark;
+    --bg: #12151a; --card: #1b2027; --line: rgba(255, 255, 255, 0.1); --text: #f2f4f7; --muted: #a3adb9;
+    --accent: #e4572e; --accent-ink: #f0714a; --accent-soft: rgba(228, 87, 46, 0.16); --field: rgba(255, 255, 255, 0.06);
+    --pic: #46505c; --scroll: rgba(255, 255, 255, 0.22);
     --ui: 'Bahnschrift', 'DIN Alternate', 'Roboto Condensed', 'Segoe UI', system-ui, sans-serif;
   }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #f4eee4; --card: #fffcf7; --line: rgba(70, 50, 20, 0.15); --text: #1d2026; --muted: #575e68;
+    --accent: #dc4f24; --accent-ink: #a8380f; --accent-soft: rgba(220, 79, 36, 0.1); --field: rgba(60, 40, 15, 0.05);
+    --pic: #d9d2c5; --scroll: rgba(60, 40, 15, 0.28);
+  }
   * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--ui); }
-  .wrap { max-width: 1120px; margin: 0 auto; padding: 32px 16px 56px; }
+  html { background: var(--bg); scrollbar-color: var(--scroll) transparent; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--ui); -webkit-text-size-adjust: 100%; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 12px 16px 56px; }
+  .top { display: flex; align-items: center; min-height: 52px; margin-right: -10px; }
   .brand { font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; font-size: 13px; }
-  .brand b { color: var(--accent); }
-  h1 { font-size: clamp(30px, 6vw, 46px); line-height: 1.08; margin: 18px 0 12px; text-wrap: balance; }
-  .lede { color: var(--muted); font-size: 17px; line-height: 1.5; max-width: 620px; margin: 0 0 32px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-  .card { display: block; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
-    text-decoration: none; color: inherit; transition: border-color 0.2s, transform 0.2s; }
+  .brand b { color: var(--accent-ink); }
+  .theme { margin-left: auto; width: 44px; height: 44px; display: grid; place-items: center; border: 0; border-radius: 50%;
+    background: transparent; color: var(--muted); cursor: pointer; padding: 0; }
+  .theme:hover { color: var(--text); background: var(--field); }
+  .theme svg { width: 20px; height: 20px; }
+  :root[data-theme="light"] .theme .sun, :root:not([data-theme="light"]) .theme .moon { display: none; }
+  h1 { font-size: clamp(30px, 6vw, 46px); line-height: 1.08; margin: 14px 0 10px; text-wrap: balance; }
+  .lede { color: var(--muted); font-size: 17px; line-height: 1.45; max-width: 620px; margin: 0 0 24px; }
+  .card { position: relative; display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--line);
+    border-radius: 16px; overflow: hidden; text-decoration: none; color: inherit; transition: border-color 0.2s, transform 0.2s; }
   .card:hover { border-color: var(--accent); transform: translateY(-2px); }
-  .card img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: #46505c; }
-  .txt { padding: 14px 16px 18px; }
-  .txt h2 { font-size: 19px; line-height: 1.2; margin: 0 0 8px; }
-  .txt p { color: var(--muted); font-size: 15px; line-height: 1.45; margin: 0; }
-  .made { margin: 48px 0 0; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+  .pic { position: relative; background: var(--pic); aspect-ratio: 4 / 3; }
+  .pic img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  /* the play cue drawn on the picture: a slider strip whose knob moves when the card is hovered */
+  .cue { position: absolute; left: 20px; right: 20px; bottom: 20px; height: 5px; border-radius: 99px;
+    background: rgba(255, 255, 255, 0.62); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35); }
+  .cue .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 58%; border-radius: 99px; background: #e4572e;
+    transition: width 0.5s ease; }
+  .cue .knob { position: absolute; top: 50%; left: 58%; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%;
+    background: #fff; box-shadow: 0 0 0 5px rgba(228, 87, 46, 0.4), 0 1px 4px rgba(0, 0, 0, 0.4); transition: left 0.5s ease; }
+  .card:hover .cue .fill, .card:focus-visible .cue .fill { width: 86%; }
+  .card:hover .cue .knob, .card:focus-visible .cue .knob { left: 86%; }
+  @media (prefers-reduced-motion: reduce) { .card, .cue .fill, .cue .knob { transition: none; } }
+  .txt { flex: 1; display: flex; flex-direction: column; padding: 14px 16px 16px; }
+  .tag { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-ink); }
+  .hook { font-size: 23px; line-height: 1.15; margin: 6px 0 8px; font-weight: 700; text-wrap: balance; }
+  .txt p { color: var(--muted); font-size: 15px; line-height: 1.45; margin: 0 0 14px; }
+  .go { margin-top: auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .open { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: 99px;
+    border: 1px solid var(--accent); background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; font-size: 15px; }
+  .what { color: var(--muted); font-size: 13px; letter-spacing: 0.04em; }
+  .new { align-self: flex-start; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #fff; background: #b83f17; padding: 5px 10px; border-radius: 99px; margin-bottom: 10px; }
+  .hero { margin-bottom: 16px; }
+  .hero .hook { font-size: clamp(26px, 4.4vw, 38px); }
+  .hero .txt p { font-size: 16px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .made { margin: 48px 0 0; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; line-height: 1.5; }
   .made a { color: var(--text); }
+  @media (min-width: 760px) {
+    .wrap { padding-top: 20px; }
+    .hero { flex-direction: row; }
+    .hero .pic { flex: 0 0 50%; }
+    .hero .txt { padding: 28px 28px 26px; justify-content: center; }
+    .hero .go { margin-top: 10px; }
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="brand">How It Actually Works <b>Lab</b></div>
+  <div class="top"><div class="brand">How It Actually Works <b>Lab</b></div>
+    <button class="theme" type="button" data-theme-toggle aria-label="Switch the theme">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+    </button></div>
   <h1>Move the sliders. Watch the physics.</h1>
-  <p class="lede">Each Lab is the 3D model from one of our Shorts, live: change the load, the size or the turns and
-    see what the part does, with every number worked out.</p>
+  <p class="lede">3D models from our Shorts, live. Play with them.</p>
+  <a class="card hero" href="capstan/index.html">
+    <div class="pic"><img src="capstan/thumb.jpg" alt="The capstan rig from the Short, in 3D" width="1200" height="900" fetchpriority="high">
+      <span class="cue" aria-hidden="true"><span class="fill"></span><span class="knob"></span></span></div>
+    <div class="txt"><span class="new">New · from our latest Short</span><span class="tag">Capstan</span><h2 class="hook">Three turns hold 43× what one turn holds</h2><p>Rope wrapped round a steel post: every extra turn multiplies what your hand can hold, it doesn&#x27;t just add to it.</p>
+      <div class="go"><span class="open">Open the Lab&nbsp;<span aria-hidden="true">→</span></span><span class="what">3D · 3 sliders</span></div></div>
+  </a>
   <div class="grid">
-    <a class="card" href="capstan/index.html">
-      <img src="capstan/thumb.jpg" alt="" loading="lazy">
-      <div class="txt"><h2>Capstan: three turns hold 43× what one turn holds</h2><p>Rope round a steel bollard: friction multiplies the hand's pull by the same factor every turn, e^(2πμ) = 6.6 at μ = 0.3. So turns multiply, they don't add: T₂ = T₁·e^(μθ).</p></div>
-    </a>
-    <a class="card" href="buckling/index.html">
-      <img src="buckling/thumb.jpg" alt="" loading="lazy">
-      <div class="txt"><h2>Buckling: 2× the length, a quarter of the load</h2><p>Two pinned struts of the same 40 × 10 mm steel bar, 500 and 1000 mm long: the long one buckles at 6.9 kN, the short one at 27.6 kN, though crushing the steel would take 110 kN. Bows are drawn 6× larger than they are, and stop where the steel starts to yield.</p></div>
-    </a>
-    <a class="card" href="gear_ratio/index.html">
-      <img src="gear_ratio/thumb.jpg" alt="" loading="lazy">
-      <div class="txt"><h2>Gear ratio: 3× the torque, not 3× the work</h2><p>A 16-tooth gear drives one with 48 teeth. The big gear gives 3 times the torque, but it turns only a third as far, so the work out equals the work in.</p></div>
-    </a>
-    <a class="card" href="torsion/index.html">
-      <img src="torsion/thumb.jpg" alt="" loading="lazy">
-      <div class="txt"><h2>Torsion: the same steel as a tube is 3.2× stiffer</h2><p>A solid Ø40 mm steel bar and a Ø58/42 mm tube hold the same 1257 mm² of steel; twisted by 1000 N·m over 1 m, the bar turns 2.85° and the tube only 0.89°. Shear stress grows with the radius (τ = T·r / J), so steel far from the axis does the work.</p></div>
-    </a>
-    <a class="card" href="beam_bending/index.html">
-      <img src="beam_bending/thumb.jpg" alt="" loading="lazy">
-      <div class="txt"><h2>Beam bending: on edge, 4× stiffer than flat</h2><p>The same 50 × 100 mm steel bar across a 2 m span, 10 kN at mid-span: flat it sags 8 mm, on edge only 2 mm - 4 times stiffer, not 2, because depth counts cubed (I = b h³/12). Sags are drawn 15× larger than they are; the colours show the bending stress (blue squeezed, red stretched), full at yield (250 MPa).</p></div>
-    </a>
+  <a class="card" href="buckling/index.html">
+    <div class="pic"><img src="buckling/thumb.jpg" alt="The buckling rig from the Short, in 3D" width="1200" height="900" loading="eager">
+      <span class="cue" aria-hidden="true"><span class="fill"></span><span class="knob"></span></span></div>
+    <div class="txt"><span class="tag">Buckling</span><h2 class="hook">2× the length, a quarter of the load</h2><p>Two pinned struts from the same steel bar, one 2× the length of the other: load them both and see which gives way.</p>
+      <div class="go"><span class="open">Open the Lab&nbsp;<span aria-hidden="true">→</span></span><span class="what">3D · 2 sliders</span></div></div>
+  </a>
+  <a class="card" href="gear_ratio/index.html">
+    <div class="pic"><img src="gear_ratio/thumb.jpg" alt="The gear ratio rig from the Short, in 3D" width="1200" height="900" loading="eager">
+      <span class="cue" aria-hidden="true"><span class="fill"></span><span class="knob"></span></span></div>
+    <div class="txt"><span class="tag">Gear ratio</span><h2 class="hook">3× the torque, not 3× the work</h2><p>A small gear drives one with 3× its teeth: you get 3× the torque, but the work out still equals the work in.</p>
+      <div class="go"><span class="open">Open the Lab&nbsp;<span aria-hidden="true">→</span></span><span class="what">3D · 2 sliders</span></div></div>
+  </a>
+  <a class="card" href="torsion/index.html">
+    <div class="pic"><img src="torsion/thumb.jpg" alt="The torsion rig from the Short, in 3D" width="1200" height="900" loading="eager">
+      <span class="cue" aria-hidden="true"><span class="fill"></span><span class="knob"></span></span></div>
+    <div class="txt"><span class="tag">Torsion</span><h2 class="hook">The same steel as a tube is 3.2× stiffer</h2><p>The same amount of steel as a solid bar and as a tube, twisted by the same torque: the tube twists far less.</p>
+      <div class="go"><span class="open">Open the Lab&nbsp;<span aria-hidden="true">→</span></span><span class="what">3D · 2 sliders</span></div></div>
+  </a>
+  <a class="card" href="beam_bending/index.html">
+    <div class="pic"><img src="beam_bending/thumb.jpg" alt="The beam bending rig from the Short, in 3D" width="1200" height="900" loading="eager">
+      <span class="cue" aria-hidden="true"><span class="fill"></span><span class="knob"></span></span></div>
+    <div class="txt"><span class="tag">Beam bending</span><h2 class="hook">On edge, 4× stiffer than flat</h2><p>The same steel bar under the same load, laid flat and stood on edge: on edge it bends far less.</p>
+      <div class="go"><span class="open">Open the Lab&nbsp;<span aria-hidden="true">→</span></span><span class="what">3D · 2 sliders</span></div></div>
+  </a>
   </div>
   <p class="made">Built by <a href="https://modelloworks.com.au" target="_blank" rel="noopener">Modello Works</a>:
     accurate, interactive 3D like this for your own product.</p>
