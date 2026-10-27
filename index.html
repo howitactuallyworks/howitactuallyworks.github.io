@@ -55,7 +55,7 @@ window.__count = (function (code) {
         + '&s=' + screen.width + '&rnd=' + Math.random().toString(36).slice(2);
     } catch (e) { /* the counter never breaks the page */ }
   };
-})("");
+})("howitactuallyworks");
 window.__count(location.pathname.replace(/index\.html$/, ''));
 </script>
 <style>
@@ -116,7 +116,15 @@ window.__count(location.pathname.replace(/index\.html$/, ''));
   .hero .hook { font-size: clamp(26px, 4.4vw, 38px); }
   .hero .txt p { font-size: 16px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-  .made { margin: 48px 0 0; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; line-height: 1.5; }
+  .shorts { margin: 48px 0 0; }
+  .shorts h2 { font-size: 22px; margin: 0 0 6px; }
+  .shorts p { color: var(--muted); margin: 0 0 14px; font-size: 15px; }
+  .plat { display: flex; gap: 10px; flex-wrap: wrap; }
+  .plat a { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 18px; border-radius: 99px;
+    border: 1px solid var(--line); background: var(--card); color: var(--text); text-decoration: none; font-weight: 600; }
+  .plat a:hover { border-color: var(--accent); }
+  .plat svg { width: 22px; height: 22px; flex: none; }
+  .made { margin: 32px 0 0; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; line-height: 1.5; }
   .made a { color: var(--text); }
   @media (min-width: 760px) {
     .wrap { padding-top: 20px; }
@@ -147,7 +155,7 @@ window.__count(location.pathname.replace(/index\.html$/, ''));
     <div class="pic"><img src="buckling/thumb.jpg" alt="The buckling rig from the Short, in 3D" width="1200" height="900" loading="eager">
       <span class="cue" aria-hidden="true"><span class="fill"></span><span class="knob"></span></span></div>
     <div class="txt"><span class="tag">Buckling</span><h2 class="hook">2× the length, a quarter of the load</h2><p>Two pinned struts from the same steel bar, one 2× the length of the other: load them both and see which gives way.</p>
-      <div class="go"><span class="open">Open the Lab&nbsp;<span aria-hidden="true">→</span></span><span class="what">3D · 2 sliders</span></div></div>
+      <div class="go"><span class="open">Open the Lab&nbsp;<span aria-hidden="true">→</span></span><span class="what">3D · 3 sliders</span></div></div>
   </a>
   <a class="card" href="gear_ratio/index.html">
     <div class="pic"><img src="gear_ratio/thumb.jpg" alt="The gear ratio rig from the Short, in 3D" width="1200" height="900" loading="eager">
@@ -168,6 +176,15 @@ window.__count(location.pathname.replace(/index\.html$/, ''));
       <div class="go"><span class="open">Open the Lab&nbsp;<span aria-hidden="true">→</span></span><span class="what">3D · 2 sliders</span></div></div>
   </a>
   </div>
+  <section class="shorts" aria-labelledby="shorts-h">
+    <h2 id="shorts-h">Watch the Shorts</h2>
+    <p>Every Lab starts as one of our Shorts.</p>
+    <div class="plat">
+      <a href="https://www.youtube.com/channel/UCRxTsXLd0fpscKZQ0j6uGcA" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4" fill="#e4572e"/><path d="M10 9.2v5.6l4.8-2.8z" fill="#fff"/></svg>YouTube</a>
+      <a href="https://www.instagram.com/howitactuallyworkshiaw/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>Instagram</a>
+      <a href="https://www.tiktok.com/@howitactuallyworkhiaw" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M13 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M13 3c.4 2.6 2.2 4.4 5 4.6"/></svg>TikTok</a>
+    </div>
+  </section>
   <p class="made">Built by <a href="https://modelloworks.com.au" target="_blank" rel="noopener">Modello Works</a>:
     accurate, interactive 3D like this for your own product.</p>
 </div>
